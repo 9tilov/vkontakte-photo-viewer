@@ -48,7 +48,6 @@ public class LoginActivity extends FragmentActivity {
                             showLogin();
                             break;
                         case LoggedIn:
-                            Intent
                             showLogout();
                             break;
                         case Pending:
@@ -69,29 +68,29 @@ public class LoginActivity extends FragmentActivity {
 //        Log.d("Fingerprint", fingerprint[0]);
     }
 
-//    private void showLogout() {
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.container, new LogoutFragment())
-//                .commitAllowingStateLoss();
-//    }
-//
-//    private void showLogin() {
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.container, new LoginFragment())
-//                .commitAllowingStateLoss();
-//    }
+    private void showLogout() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, LogoutFragment.newInstance())
+                .commitAllowingStateLoss();
+    }
+
+    private void showLogin() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, PreviewFragment.newInstance())
+                .commitAllowingStateLoss();
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         isResumed = true;
-//        if (VKSdk.isLoggedIn()) {
-//            showLogout();
-//        } else {
-//            showLogin();
-//        }
+        if (VKSdk.isLoggedIn()) {
+            showLogout();
+        } else {
+            showLogin();
+        }
     }
 
     @Override
@@ -111,7 +110,7 @@ public class LoginActivity extends FragmentActivity {
             @Override
             public void onResult(VKAccessToken res) {
                 // User passed Authorization
-                startTestActivity();
+                showLogin();
             }
 
             @Override
@@ -125,9 +124,9 @@ public class LoginActivity extends FragmentActivity {
         }
     }
 
-    private void startTestActivity() {
-        startActivity(new Intent(this, PreviewActivity.class));
-    }
+//    private void startTestActivity() {
+//        startActivity(new Intent(this, PreviewActivity.class));
+//    }
 
 //    public static class LoginFragment extends android.support.v4.app.Fragment {
 //        public LoginFragment() {
