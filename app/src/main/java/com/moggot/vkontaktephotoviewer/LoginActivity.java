@@ -2,10 +2,8 @@ package com.moggot.vkontaktephotoviewer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -21,24 +19,11 @@ public class LoginActivity extends FragmentActivity {
 
     private boolean isResumed = false;
 
-    /**
-     * Scope is set of required permissions for your application
-     *
-     * @see <a href="https://vk.com/dev/permissions">vk.com api permissions documentation</a>
-     */
-    private static final String[] sMyScope = new String[]{
-            VKScope.FRIENDS,
-            VKScope.WALL,
-            VKScope.PHOTOS,
-            VKScope.NOHTTPS,
-            VKScope.MESSAGES,
-            VKScope.DOCS
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
         VKSdk.wakeUpSession(this, new VKCallback<VKSdk.LoginState>() {
             @Override
             public void onResult(VKSdk.LoginState res) {
@@ -48,7 +33,7 @@ public class LoginActivity extends FragmentActivity {
                             showLogin();
                             break;
                         case LoggedIn:
-                            showLogout();
+                            showPreview();
                             break;
                         case Pending:
                             break;
@@ -68,18 +53,22 @@ public class LoginActivity extends FragmentActivity {
 //        Log.d("Fingerprint", fingerprint[0]);
     }
 
-    private void showLogout() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, LogoutFragment.newInstance())
-                .commitAllowingStateLoss();
+    private void showLogin() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(Consts.LOGIN_FRAGMENT_TAG);
+        if (fragment == null)
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, LoginFragment.newInstance(), Consts.LOGIN_FRAGMENT_TAG)
+                    .commitAllowingStateLoss();
     }
 
-    private void showLogin() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, PreviewFragment.newInstance())
-                .commitAllowingStateLoss();
+    private void showPreview() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(Consts.PREVIEW_FRAGMENT_TAG);
+        if (fragment == null)
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, PreviewFragment.newInstance(), Consts.PREVIEW_FRAGMENT_TAG)
+                    .commitAllowingStateLoss();
     }
 
     @Override
@@ -87,7 +76,7 @@ public class LoginActivity extends FragmentActivity {
         super.onResume();
         isResumed = true;
         if (VKSdk.isLoggedIn()) {
-            showLogout();
+            showPreview();
         } else {
             showLogin();
         }
@@ -147,14 +136,14 @@ public class LoginActivity extends FragmentActivity {
 //
 //    }
 
-//    public static class LogoutFragment extends android.support.v4.app.Fragment {
-//        public LogoutFragment() {
+//    public static class LoginFragment extends android.support.v4.app.Fragment {
+//        public LoginFragment() {
 //            super();
 //        }
 //
 //        @Override
 //        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//            View v = inflater.inflate(R.layout.fragment_logout, container, false);
+//            View v = inflater.inflate(R.layout.fragment_login, container, false);
 //            v.findViewById(R.id.continue_button).setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
