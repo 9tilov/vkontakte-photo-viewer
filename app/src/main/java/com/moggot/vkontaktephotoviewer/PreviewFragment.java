@@ -36,12 +36,43 @@ public class PreviewFragment extends Fragment {
     private List<Bitmap> photosBitmap;
     private VKPhotoArray photos;
 
+    private DownloadImageSetTask task;
+
     public PreviewFragment() {
         // Required empty public constructor
     }
 
     public static PreviewFragment newInstance() {
         return new PreviewFragment();
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
+        photosBitmap = new ArrayList<>();
+        adapter = new PhotoAdapter(getApplicationContext(), photosBitmap);
+
+        VKAccessToken token = VKAccessToken.currentToken();
+        VKRequest request = new VKRequest("photos.getAll", VKParameters.from(token.userId, "request", "count", "200"), VKPhotoArray.class);
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                try {
+                    photos = (VKPhotoArray) response.parsedModel;
+                    task = (DownloadImageSetTask) getActivity().getLastNonConfigurationInstance();
+                    if (task == null) {
+                        task = new DownloadImageSetTask();
+                        task.execute(photos);
+                    }
+                    task.link(PreviewFragment.this);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -59,6 +90,8 @@ public class PreviewFragment extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(3, 1);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
 
         recyclerView.addOnItemTouchListener(new PhotoAdapter.RecyclerTouchListener(getApplicationContext(), new PhotoAdapter.ClickListener() {
             @Override
@@ -75,10 +108,6 @@ public class PreviewFragment extends Fragment {
 
         }));
 
-        photosBitmap = new ArrayList<>();
-
-        adapter = new PhotoAdapter(getApplicationContext(), photosBitmap);
-        recyclerView.setAdapter(adapter);
         view.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,34 +122,27 @@ public class PreviewFragment extends Fragment {
 
             }
         });
-
-        VKAccessToken token = VKAccessToken.currentToken();
-        VKRequest request = new VKRequest("photos.getAll", VKParameters.from(token.userId, "request", "count", "200"), VKPhotoArray.class);
-        Log.v(LOG_TAG, "request = " + request.toString());
-
-        request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                try {
-                    photos = (VKPhotoArray) response.parsedModel;
-                    Bitmap defaultIcon = BitmapFactory.decodeResource(getActivity().getResources(),
-                            android.R.color.white);
-                    for (int i = 0; i < photos.size(); ++i) {
-                        photosBitmap.add(defaultIcon);
-                    }
-                    new DownloadImageSetTask().execute(photos);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
-    private class DownloadImageSetTask extends AsyncTask<VKPhotoArray, Bitmap, Void> {
+    private Object onRetainNonConfigurationInstance() {
+        task.unLink();
+        return task;
+    }
+
+    private static class DownloadImageSetTask extends AsyncTask<VKPhotoArray, Bitmap, Void> {
 
         private static final String LOG_TAG = "DownloadImageSetTask";
 
-        private int index = 0;
+        private PreviewFragment fragment;
+
+        void link(PreviewFragment fragment) {
+            this.fragment = fragment;
+        }
+
+        // обнуляем ссылку
+        void unLink() {
+            fragment = null;
+        }
 
         public DownloadImageSetTask() {
         }
@@ -143,9 +165,8 @@ public class PreviewFragment extends Fragment {
         @Override
         protected void onProgressUpdate(Bitmap... values) {
             super.onProgressUpdate(values);
-            photosBitmap.set(index, values[0]);
-            ++index;
-            adapter.notifyDataSetChanged();
+            fragment.photosBitmap.add(values[0]);
+            fragment.adapter.notifyDataSetChanged();
         }
     }
 }
