@@ -1,5 +1,6 @@
 package com.moggot.vkontaktephotoviewer;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -26,13 +29,9 @@ public class SlideshowDialogFragment extends DialogFragment {
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
     private VKPhotoArray images;
     private ViewPager viewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
-    private TextView lblTitle;
     private int selectedPosition = 0;
 
-    private ImageView imageViewPreview;
-
-    private DownloadImageTask task;
+    private static final String LOG_TAG = "MyViewPagerAdapter";
 
     static SlideshowDialogFragment newInstance() {
         return new SlideshowDialogFragment();
@@ -42,7 +41,6 @@ public class SlideshowDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-
     }
 
     @Override
@@ -50,7 +48,6 @@ public class SlideshowDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_image_slider, container, false);
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
-        lblTitle = (TextView) v.findViewById(R.id.title);
 
         images = getArguments().getParcelable("images");
         selectedPosition = getArguments().getInt("position");
@@ -58,7 +55,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         Log.e(TAG, "position: " + selectedPosition);
         Log.e(TAG, "images size: " + images.size());
 
-        myViewPagerAdapter = new MyViewPagerAdapter();
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -77,7 +74,10 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         @Override
         public void onPageSelected(int position) {
+            Log.v(LOG_TAG, "pos1 = " + position);
+
             displayMetaInfo(position);
+
         }
 
         @Override
@@ -97,36 +97,36 @@ public class SlideshowDialogFragment extends DialogFragment {
 //        lblDate.setText(image.getTimestamp());
     }
 
-    private Object onRetainNonConfigurationInstance() {
-        task.unLink();
-        return task;
+    @Override
+    public void onDestroyView() {
+        Dialog dialog = getDialog();
+        if (dialog != null && getRetainInstance()) {
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 
     //	adapter
     public class MyViewPagerAdapter extends PagerAdapter {
 
-        private LayoutInflater layoutInflater;
+        ImageCache cache;
 
         public MyViewPagerAdapter() {
+            cache = ImageCache.getInstance();
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
 
-            layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
+            View view = LayoutInflater.from(container.getContext()).inflate(R.layout.image_fullscreen_preview, container, false);
+            ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-            imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
+            ImageView imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
 
             VKApiPhoto photo = images.get(position);
 
-            task = (DownloadImageTask) getActivity().getLastNonConfigurationInstance();
-            if (task == null) {
-                task = new DownloadImageTask();
-                task.execute(photo);
-            }
-            task.link(SlideshowDialogFragment.this);
-
+            DownloadImageTask task = new DownloadImageTask(progressBar, imageViewPreview);
+            task.execute(photo);
             container.addView(view);
 
             return view;
@@ -144,46 +144,54 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
+            container.removeView((RelativeLayout) object);
         }
 
-    }
+        private class DownloadImageTask extends AsyncTask<VKApiPhoto, Void, Bitmap> {
 
-    private static class DownloadImageTask extends AsyncTask<VKApiPhoto, Void, Bitmap> {
+            private static final String LOG_TAG = "DownloadImageSetTask";
 
-        private static final String LOG_TAG = "DownloadImageSetTask";
+            private ImageView iw;
+            private ProgressBar progressBar;
 
-        private SlideshowDialogFragment fragment;
-
-        void link(SlideshowDialogFragment fragment) {
-            this.fragment = fragment;
-        }
-
-        // обнуляем ссылку
-        void unLink() {
-            fragment = null;
-        }
-
-        public DownloadImageTask() {
-        }
-
-        protected Bitmap doInBackground(VKApiPhoto... photo) {
-            String url = photo[0].photo_604;
-            Bitmap image = null;
-            try {
-                InputStream in = new java.net.URL(url).openStream();
-                image = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+            public DownloadImageTask(ProgressBar progressBar, ImageView iw) {
+                this.iw = iw;
+                this.progressBar = progressBar;
             }
-            return image;
+
+            protected Bitmap doInBackground(VKApiPhoto... photo) {
+                String url = photo[0].photo_604;
+                Bitmap image = null;
+                try {
+
+                    image = cache.getBitmapFromMemCache(url);
+                    if (image == null) {
+                        InputStream in = new java.net.URL(url).openStream();
+                        image = BitmapFactory.decodeStream(in);
+                        cache.addBitmapToMemoryCache(url, image);
+                    }
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                }
+                return image;
+            }
+
+            @Override
+            protected void onProgressUpdate(Void... values) {
+                super.onProgressUpdate(values);
+
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap result) {
+                super.onPostExecute(result);
+                iw.setImageBitmap(result);
+                progressBar.setVisibility(View.GONE);
+            }
         }
 
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            fragment.imageViewPreview.setImageBitmap(result);
-        }
     }
+
+
 }
