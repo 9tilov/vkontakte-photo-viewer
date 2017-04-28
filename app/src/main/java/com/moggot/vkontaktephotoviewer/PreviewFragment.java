@@ -39,7 +39,6 @@ public class PreviewFragment extends Fragment {
     private DownloadImageSetTask task;
 
     public PreviewFragment() {
-        // Required empty public constructor
     }
 
     public static PreviewFragment newInstance() {

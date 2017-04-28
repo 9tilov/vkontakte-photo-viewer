@@ -30,9 +30,19 @@ public class SlideshowDialogFragment extends DialogFragment {
     private TextView lblTitle;
     private int selectedPosition = 0;
 
+    private ImageView imageViewPreview;
+
+    private DownloadImageTask task;
+
     static SlideshowDialogFragment newInstance() {
-        SlideshowDialogFragment f = new SlideshowDialogFragment();
-        return f;
+        return new SlideshowDialogFragment();
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+
     }
 
     @Override
@@ -87,10 +97,9 @@ public class SlideshowDialogFragment extends DialogFragment {
 //        lblDate.setText(image.getTimestamp());
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+    private Object onRetainNonConfigurationInstance() {
+        task.unLink();
+        return task;
     }
 
     //	adapter
@@ -107,12 +116,16 @@ public class SlideshowDialogFragment extends DialogFragment {
             layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
 
-            ImageView imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
-
+            imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
 
             VKApiPhoto photo = images.get(position);
 
-            new DownloadImageTask(imageViewPreview).execute(photo);
+            task = (DownloadImageTask) getActivity().getLastNonConfigurationInstance();
+            if (task == null) {
+                task = new DownloadImageTask();
+                task.execute(photo);
+            }
+            task.link(SlideshowDialogFragment.this);
 
             container.addView(view);
 
@@ -134,33 +147,43 @@ public class SlideshowDialogFragment extends DialogFragment {
             container.removeView((View) object);
         }
 
-        private class DownloadImageTask extends AsyncTask<VKApiPhoto, Void, Bitmap> {
+    }
 
-            private static final String LOG_TAG = "DownloadImageSetTask";
-            private ImageView iwPhoto;
+    private static class DownloadImageTask extends AsyncTask<VKApiPhoto, Void, Bitmap> {
 
-            public DownloadImageTask(ImageView iwPhoto) {
-                this.iwPhoto = iwPhoto;
+        private static final String LOG_TAG = "DownloadImageSetTask";
+
+        private SlideshowDialogFragment fragment;
+
+        void link(SlideshowDialogFragment fragment) {
+            this.fragment = fragment;
+        }
+
+        // обнуляем ссылку
+        void unLink() {
+            fragment = null;
+        }
+
+        public DownloadImageTask() {
+        }
+
+        protected Bitmap doInBackground(VKApiPhoto... photo) {
+            String url = photo[0].photo_604;
+            Bitmap image = null;
+            try {
+                InputStream in = new java.net.URL(url).openStream();
+                image = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
             }
+            return image;
+        }
 
-            protected Bitmap doInBackground(VKApiPhoto... photo) {
-                String url = photo[0].photo_604;
-                Bitmap image = null;
-                try {
-                    InputStream in = new java.net.URL(url).openStream();
-                    image = BitmapFactory.decodeStream(in);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-                return image;
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap result) {
-                super.onPostExecute(result);
-                iwPhoto.setImageBitmap(result);
-            }
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            fragment.imageViewPreview.setImageBitmap(result);
         }
     }
 }
