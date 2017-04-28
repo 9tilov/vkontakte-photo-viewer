@@ -3,6 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical">
 
 
@@ -12,10 +13,11 @@
         android:layout_height="wrap_content"
         android:text="@string/logout" />
 
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/imagegallery"
+        android:id="@+id/imageGallery"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:scrollbars="vertical"/>
 
 </LinearLayout>
