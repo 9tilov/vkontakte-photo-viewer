@@ -1,5 +1,6 @@
 package com.moggot.vkontaktephotoviewer;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -10,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -47,6 +51,7 @@ public class PreviewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
+
         photosBitmap = new ArrayList<>();
         adapter = new PhotoAdapter(photosBitmap);
 
@@ -73,8 +78,14 @@ public class PreviewFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_preview, container, false);
     }
 
@@ -104,10 +115,23 @@ public class PreviewFragment extends Fragment {
             }
 
         }));
+    }
 
-        view.findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    private Object onRetainNonConfigurationInstance() {
+        task.unLink();
+        return task;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
                 VKSdk.logout();
                 if (VKSdk.isLoggedIn())
                     Log.v(LOG_TAG, "CAN'T logout");
@@ -116,15 +140,12 @@ public class PreviewFragment extends Fragment {
                             .beginTransaction()
                             .replace(R.id.container, LoginFragment.newInstance())
                             .commitAllowingStateLoss();
+                return true;
 
-            }
-        });
+        }
+        return onOptionsItemSelected(item);
     }
 
-    private Object onRetainNonConfigurationInstance() {
-        task.unLink();
-        return task;
-    }
 
     private static class DownloadImageSetTask extends AsyncTask<VKPhotoArray, Bitmap, Void> {
 

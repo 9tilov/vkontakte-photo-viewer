@@ -6,13 +6,6 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/logout" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/imageGallery"
         android:layout_width="match_parent"

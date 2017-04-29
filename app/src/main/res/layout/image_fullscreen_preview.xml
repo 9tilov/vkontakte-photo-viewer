@@ -14,7 +14,7 @@
 
     <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/progressBar"
-        style="@style/SpinKitView.Large.Circle"
+        style="@style/SpinKitView.Large.CubeGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -28,7 +28,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="20dp"
         android:layout_toEndOf="@+id/progressBar"
         android:layout_toRightOf="@+id/progressBar"
         android:text="@string/added"

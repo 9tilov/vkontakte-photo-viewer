@@ -4,12 +4,14 @@
     android:layout_height="match_parent"
     tools:context="com.moggot.vkontaktephotoviewer.LoginFragment">
 
-    <Button
+    <TextView
         android:id="@+id/btnLogin"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/login"/>
+        android:text="@string/login"
+        android:clickable="true"/>
 
 </RelativeLayout>

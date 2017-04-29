@@ -28,8 +28,8 @@ public class DownloadPhotoDisplay implements Observer {
     private void displayProgressBar(View view) {
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        CubeGrid cubeGrid = new CubeGrid();
-        progressBar.setIndeterminateDrawable(cubeGrid);
+        CubeGrid cube = new CubeGrid();
+        progressBar.setIndeterminateDrawable(cube);
     }
 
     private void hideText(View view) {
