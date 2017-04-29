@@ -30,12 +30,11 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 public class PreviewFragment extends Fragment {
 
-    private static final String LOG_TAG = "PreviewFragment";
+    private static final String LOG_TAG = PreviewFragment.class.getSimpleName();
 
     private PhotoAdapter adapter;
     private List<Bitmap> photosBitmap;
     private VKPhotoArray photos;
-
     private DownloadImageSetTask task;
 
     public PreviewFragment() {
@@ -50,7 +49,7 @@ public class PreviewFragment extends Fragment {
         setRetainInstance(true);
 
         photosBitmap = new ArrayList<>();
-        adapter = new PhotoAdapter(getApplicationContext(), photosBitmap);
+        adapter = new PhotoAdapter(photosBitmap);
 
         VKAccessToken token = VKAccessToken.currentToken();
         VKRequest request = new VKRequest("photos.getAll", VKParameters.from(token.userId, "request", "count", "200"), VKPhotoArray.class);
@@ -62,7 +61,7 @@ public class PreviewFragment extends Fragment {
                     task = (DownloadImageSetTask) getActivity().getLastNonConfigurationInstance();
                     if (task == null) {
                         task = new DownloadImageSetTask();
-                        task.execute(photos);
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, photos);
                     }
                     task.link(PreviewFragment.this);
 

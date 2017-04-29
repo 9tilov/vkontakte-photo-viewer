@@ -11,12 +11,23 @@ public class ImageCache {
 
     private LruCache<String, Bitmap> mMemoryCache;
 
+    private static volatile ImageCache instance;
+
     private ImageCache() {
         init();
     }
 
     public static ImageCache getInstance() {
-        return new ImageCache();
+        ImageCache localInstance = instance;
+        if (localInstance == null) {
+            synchronized (ImageCache.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new ImageCache();
+                }
+            }
+        }
+        return localInstance;
     }
 
     private void init() {

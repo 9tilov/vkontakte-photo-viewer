@@ -7,20 +7,17 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
-    private List<Bitmap> galleryList;
-    private Context context;
 
-    public PhotoAdapter(Context context, List<Bitmap> galleryList) {
+    private List<Bitmap> galleryList;
+
+    public PhotoAdapter(List<Bitmap> galleryList) {
         this.galleryList = galleryList;
-        this.context = context;
     }
 
     @Override

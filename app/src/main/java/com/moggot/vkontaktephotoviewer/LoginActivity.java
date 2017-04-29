@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
@@ -48,9 +47,6 @@ public class LoginActivity extends FragmentActivity {
 
             }
         });
-
-//        String[] fingerprint = VKUtil.getCertificateFingerprint(this, this.getPackageName());
-//        Log.d("Fingerprint", fingerprint[0]);
     }
 
     private void showLogin() {
