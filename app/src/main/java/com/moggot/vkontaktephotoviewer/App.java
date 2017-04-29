@@ -9,10 +9,6 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
 
-/**
- * Created by toor on 25.04.17.
- */
-
 public class App extends Application {
 
     private static final String LOG_TAG = App.class.getSimpleName();

@@ -4,16 +4,13 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.moggot.vkontaktephotoviewer.observer.DownloadPhotoDisplay;
 import com.moggot.vkontaktephotoviewer.observer.PhotoData;
@@ -22,13 +19,6 @@ import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKPhotoArray;
 
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-/**
- * Created by toor on 29.04.17.
- */
 
 public class PageViewAdapter extends PagerAdapter {
 
@@ -77,8 +67,8 @@ public class PageViewAdapter extends PagerAdapter {
         private final String LOG_TAG = DownloadImageTask.class.getSimpleName();
 
         private View view;
-        PhotoData photoData;
-        VKApiPhoto photo;
+        private PhotoData photoData;
+        private VKApiPhoto photo;
 
         public DownloadImageTask(View view) {
             this.view = view;
@@ -121,5 +111,4 @@ public class PageViewAdapter extends PagerAdapter {
             ((ImageView) view.findViewById(R.id.image_preview)).setImageBitmap(result);
         }
     }
-
 }

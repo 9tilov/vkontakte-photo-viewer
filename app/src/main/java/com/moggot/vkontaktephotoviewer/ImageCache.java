@@ -3,10 +3,6 @@ package com.moggot.vkontaktephotoviewer;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
-/**
- * Created by toor on 28.04.17.
- */
-
 public class ImageCache {
 
     private LruCache<String, Bitmap> mMemoryCache;

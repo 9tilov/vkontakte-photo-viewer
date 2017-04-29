@@ -10,10 +10,6 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
-/**
- * Created by toor on 25.04.17.
- */
-
 public class LoginActivity extends FragmentActivity {
 
     private boolean isResumed = false;

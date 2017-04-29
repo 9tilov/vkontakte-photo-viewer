@@ -1,29 +1,16 @@
 package com.moggot.vkontaktephotoviewer.observer;
 
-import android.content.res.Resources;
-import android.os.Build;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.github.ybq.android.spinkit.style.Circle;
 import com.github.ybq.android.spinkit.style.CubeGrid;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.moggot.vkontaktephotoviewer.R;
 import com.vk.sdk.api.model.VKApiPhoto;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-/**
- * Created by toor on 29.04.17.
- */
 
 public class DownloadPhotoDisplay implements Observer {
 
     private static final String LOG_TAG = DownloadPhotoDisplay.class.getSimpleName();
-
-    private VKApiPhoto photo;
 
     public DownloadPhotoDisplay(PhotoData photoData) {
         photoData.registerObserver(this);
@@ -31,7 +18,6 @@ public class DownloadPhotoDisplay implements Observer {
 
     @Override
     public void update(VKApiPhoto photo) {
-        this.photo = photo;
     }
 
     public void display(View view) {

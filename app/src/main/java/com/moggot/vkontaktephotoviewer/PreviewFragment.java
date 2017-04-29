@@ -27,7 +27,6 @@ import java.util.List;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
-
 public class PreviewFragment extends Fragment {
 
     private static final String LOG_TAG = PreviewFragment.class.getSimpleName();

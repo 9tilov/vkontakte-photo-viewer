@@ -3,7 +3,6 @@ package com.moggot.vkontaktephotoviewer.observer;
 import android.content.res.Resources;
 import android.os.Build;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -12,10 +11,6 @@ import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-/**
- * Created by toor on 22.02.17.
- */
 
 public class PhotoDisplay implements Observer {
 

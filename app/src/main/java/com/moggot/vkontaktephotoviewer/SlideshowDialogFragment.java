@@ -2,16 +2,12 @@ package com.moggot.vkontaktephotoviewer;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.vk.sdk.api.model.VKPhotoArray;
 
@@ -20,7 +16,6 @@ public class SlideshowDialogFragment extends DialogFragment {
     private static final String LOG_TAG = SlideshowDialogFragment.class.getSimpleName();
 
     private ViewPager viewPager;
-    private int selectedPosition = 0;
 
     static SlideshowDialogFragment newInstance() {
         return new SlideshowDialogFragment();
@@ -40,12 +35,11 @@ public class SlideshowDialogFragment extends DialogFragment {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
-        VKPhotoArray images = getArguments().getParcelable("images");
-        selectedPosition = getArguments().getInt("position");
+        VKPhotoArray photos = getArguments().getParcelable("images");
+        int selectedPosition = getArguments().getInt("position");
 
-        PageViewAdapter myViewPagerAdapter = new PageViewAdapter(getContext().getResources(), images);
+        PageViewAdapter myViewPagerAdapter = new PageViewAdapter(getContext().getResources(), photos);
         viewPager.setAdapter(myViewPagerAdapter);
-        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
         setCurrentItem(selectedPosition);
 
@@ -54,34 +48,6 @@ public class SlideshowDialogFragment extends DialogFragment {
 
     private void setCurrentItem(int position) {
         viewPager.setCurrentItem(position, false);
-        displayMetaInfo(selectedPosition);
-    }
-
-    //	page change listener
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-
-        @Override
-        public void onPageSelected(int position) {
-
-            displayMetaInfo(position);
-
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-
-        }
-    };
-
-    private void displayMetaInfo(int position) {
-//        Image image = images.get(position);
-//        lblTitle.setText(image.getName());
-//        lblDate.setText(image.getTimestamp());
     }
 
     @Override
