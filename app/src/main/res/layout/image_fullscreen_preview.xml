@@ -12,21 +12,66 @@
         android:layout_centerInParent="true"
         android:scaleType="fitCenter" />
 
-    <ProgressBar
+    <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
+        style="@style/SpinKitView.Large.Circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        app:SpinKit_Color="@color/vk_white" />
+
+    <TextView
+        android:id="@+id/tvAdded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_toEndOf="@+id/progressBar"
+        android:layout_toRightOf="@+id/progressBar"
+        android:text="@string/added"
+        android:textColor="@color/vk_white"
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/tvText"
+        android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/image_preview"
-        android:text="test"
-        android:textColor="@color/vk_white" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/tvAdded"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_toEndOf="@+id/tvAdded"
+        android:layout_toRightOf="@+id/tvAdded"
+        android:text="date"
+        android:textColor="@color/vk_white"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iwLikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvDate"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_toEndOf="@+id/tvDate"
+        android:layout_toRightOf="@+id/tvDate"
+        android:src="@drawable/ic_favorite_black_24dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvLikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/iwLikes"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_toEndOf="@+id/iwLikes"
+        android:layout_toRightOf="@+id/iwLikes"
+        android:textColor="@color/vk_white"
+        android:visibility="gone" />
 
 </RelativeLayout>

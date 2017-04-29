@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">VkontaktePhotoViewer</string>
+
+    <string name="login">Войти</string>
+    <string name="logout">Выйти</string>
+    <string name="added">Добавлена:</string>
+
+</resources>

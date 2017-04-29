@@ -1,8 +1,10 @@
 package com.moggot.vkontaktephotoviewer;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,10 +15,16 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.moggot.vkontaktephotoviewer.observer.DownloadPhotoDisplay;
+import com.moggot.vkontaktephotoviewer.observer.PhotoData;
+import com.moggot.vkontaktephotoviewer.observer.PhotoDisplay;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKPhotoArray;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by toor on 29.04.17.
@@ -28,11 +36,12 @@ public class PageViewAdapter extends PagerAdapter {
 
     private ImageCache cache;
     private VKPhotoArray images;
+    private Resources res;
 
-
-    public PageViewAdapter(VKPhotoArray images) {
+    public PageViewAdapter(Resources res, VKPhotoArray images) {
         this.images = images;
         this.cache = ImageCache.getInstance();
+        this.res = res;
     }
 
     @Override
@@ -68,18 +77,24 @@ public class PageViewAdapter extends PagerAdapter {
         private final String LOG_TAG = DownloadImageTask.class.getSimpleName();
 
         private View view;
+        PhotoData photoData;
+        VKApiPhoto photo;
 
         public DownloadImageTask(View view) {
             this.view = view;
+            this.photoData = new PhotoData();
         }
 
         @Override
         protected void onPreExecute() {
-            ((ProgressBar) view.findViewById(R.id.progressBar)).setVisibility(View.VISIBLE);
+            DownloadPhotoDisplay downloadPhotoDisplay = new DownloadPhotoDisplay(photoData);
+            downloadPhotoDisplay.display(view);
         }
 
-        protected Bitmap doInBackground(VKApiPhoto... photo) {
-            String url = photo[0].photo_604;
+        protected Bitmap doInBackground(VKApiPhoto... photoInput) {
+            String url = photoInput[0].photo_604;
+            photo = photoInput[0];
+
             Bitmap image = null;
             try {
                 image = cache.getBitmapFromMemCache(url);
@@ -98,8 +113,11 @@ public class PageViewAdapter extends PagerAdapter {
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
-            ((TextView) view.findViewById(R.id.tvText)).setText("aaaaaaaaaa");
-            ((ProgressBar) view.findViewById(R.id.progressBar)).setVisibility(View.GONE);
+
+            PhotoDisplay photoDisplay = new PhotoDisplay(res, photoData);
+            photoData.setPhoto(photo);
+            photoDisplay.display(view);
+
             ((ImageView) view.findViewById(R.id.image_preview)).setImageBitmap(result);
         }
     }

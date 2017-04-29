@@ -5,5 +5,6 @@
 
     <string name="login">Login</string>
     <string name="logout">Logout</string>
+    <string name="added">Added:</string>
 
 </resources>
