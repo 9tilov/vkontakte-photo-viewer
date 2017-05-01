@@ -2,11 +2,14 @@ package com.moggot.vkontaktephotoviewer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -50,7 +53,10 @@ public class LoginFragment extends Fragment {
         view.findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VKSdk.login(getActivity(), sMyScope);
+                if (isNetworkAvailable())
+                    VKSdk.login(getActivity(), sMyScope);
+                else
+                    internetUnavailable();
             }
         });
         return view;
@@ -87,5 +93,17 @@ public class LoginFragment extends Fragment {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, callback)) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
+    }
+
+    private void internetUnavailable() {
+        Toast.makeText(getActivity(),
+                R.string.no_internet_connection,
+                Toast.LENGTH_SHORT).show();
     }
 }

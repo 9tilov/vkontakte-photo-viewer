@@ -7,4 +7,6 @@
     <string name="logout">Logout</string>
     <string name="added">Added:</string>
 
+    <string name="no_internet_connection">Internet connection is unavailable</string>
+
 </resources>

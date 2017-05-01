@@ -5,4 +5,6 @@
     <string name="logout">Выйти</string>
     <string name="added">Добавлена:</string>
 
+    <string name="no_internet_connection">Нет подключения к Интернету</string>
+
 </resources>
