@@ -2,7 +2,9 @@ package com.moggot.vkontaktephotoviewer.observer;
 
 import android.content.res.Resources;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -10,6 +12,7 @@ import com.moggot.vkontaktephotoviewer.R;
 import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class PhotoDisplay implements Observer {
@@ -42,7 +45,7 @@ public class PhotoDisplay implements Observer {
     private void displayDate(View view) {
         ((TextView) view.findViewById(R.id.tvAdded)).setVisibility(View.VISIBLE);
         ((TextView) view.findViewById(R.id.tvDate)).setVisibility(View.VISIBLE);
-        Date date = new Date(photo.date);
+        Date date = new Date(photo.date * 1000);
         SimpleDateFormat df;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             df = new SimpleDateFormat("dd MMM yyyy", res.getConfiguration().getLocales().get(0));
@@ -53,8 +56,10 @@ public class PhotoDisplay implements Observer {
     }
 
     private void displayLikes(View view) {
-        ((TextView) view.findViewById(R.id.tvLikes)).setVisibility(View.VISIBLE);
-        if (photo.likes != 0)
-            ((TextView) view.findViewById(R.id.tvLikes)).setText(photo.likes);
+        if (photo.likes != 0) {
+            ((TextView) view.findViewById(R.id.tvLikes)).setVisibility(View.VISIBLE);
+            ((ImageView) view.findViewById(R.id.iwLikes)).setVisibility(View.VISIBLE);
+            ((TextView) view.findViewById(R.id.tvLikes)).setText(String.valueOf(photo.likes));
+        }
     }
 }

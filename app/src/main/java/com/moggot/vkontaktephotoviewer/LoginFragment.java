@@ -23,8 +23,7 @@ public class LoginFragment extends Fragment {
      * @see <a href="https://vk.com/dev/permissions">vk.com api permissions documentation</a>
      */
     private static final String[] sMyScope = new String[]{
-            VKScope.PHOTOS,
-            VKScope.NOHTTPS
+            VKScope.PHOTOS
     };
 
     public LoginFragment() {

@@ -56,7 +56,7 @@ public class PreviewFragment extends Fragment {
         adapter = new PhotoAdapter(photosBitmap);
 
         VKAccessToken token = VKAccessToken.currentToken();
-        VKRequest request = new VKRequest("photos.getAll", VKParameters.from(token.userId, "request", "count", "200"), VKPhotoArray.class);
+        VKRequest request = new VKRequest("photos.getAll", VKParameters.from(token.userId, "request", "extended", "1", "count", "200"), VKPhotoArray.class);
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
