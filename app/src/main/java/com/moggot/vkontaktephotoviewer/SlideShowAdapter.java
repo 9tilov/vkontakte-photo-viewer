@@ -27,13 +27,13 @@ public class SlideShowAdapter extends PagerAdapter {
 
     private static final String LOG_TAG = SlideShowAdapter.class.getSimpleName();
 
-    private ImageCache cache;
+    private static ImageCache cache;
     private VKPhotoArray images;
     private Resources res;
 
     public SlideShowAdapter(Resources res, VKPhotoArray images) {
         this.images = images;
-        this.cache = ImageCache.getInstance();
+        cache = ImageCache.getInstance();
         this.res = res;
     }
 
@@ -43,7 +43,7 @@ public class SlideShowAdapter extends PagerAdapter {
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.image_fullscreen_preview, container, false);
 
         VKApiPhoto photo = images.get(position);
-        DownloadImageTask task = new DownloadImageTask(view);
+        DownloadImageTask task = new DownloadImageTask(res, view);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, photo);
         container.addView(view);
 
@@ -65,16 +65,18 @@ public class SlideShowAdapter extends PagerAdapter {
         container.removeView((RelativeLayout) object);
     }
 
-    private class DownloadImageTask extends AsyncTask<VKApiPhoto, Void, Bitmap> {
+    private static class DownloadImageTask extends AsyncTask<VKApiPhoto, Void, Bitmap> {
 
         private final String LOG_TAG = DownloadImageTask.class.getSimpleName();
 
         private View view;
+        private Resources res;
         private PhotoData photoData;
         private VKApiPhoto photo;
 
-        public DownloadImageTask(View view) {
+        public DownloadImageTask(Resources res, View view) {
             this.view = view;
+            this.res = res;
             this.photoData = new PhotoData();
         }
 
