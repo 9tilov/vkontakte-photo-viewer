@@ -35,8 +35,8 @@ public class SlideshowDialogFragment extends DialogFragment {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
-        VKPhotoArray photos = getArguments().getParcelable("images");
-        int selectedPosition = getArguments().getInt("position");
+        VKPhotoArray photos = getArguments().getParcelable(Consts.EXTRA_PHOTO_ARRAY);
+        int selectedPosition = getArguments().getInt(Consts.EXTRA_PHOTO_POSITION);
 
         PageViewAdapter myViewPagerAdapter = new PageViewAdapter(getContext().getResources(), photos);
         viewPager.setAdapter(myViewPagerAdapter);
@@ -57,5 +57,6 @@ public class SlideshowDialogFragment extends DialogFragment {
             dialog.setDismissMessage(null);
         }
         super.onDestroyView();
+        viewPager = null;
     }
 }

@@ -20,17 +20,11 @@ import com.vk.sdk.api.VKError;
 
 public class LoginFragment extends Fragment {
 
-    /**
-     * Scope is set of required permissions for your application
-     *
-     * @see <a href="https://vk.com/dev/permissions">vk.com api permissions documentation</a>
-     */
     private static final String[] sMyScope = new String[]{
             VKScope.PHOTOS
     };
 
     public LoginFragment() {
-        // Required empty public constructor
     }
 
     public static LoginFragment newInstance() {
@@ -38,17 +32,14 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,17 +50,6 @@ public class LoginFragment extends Fragment {
                     internetUnavailable();
             }
         });
-        return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override
@@ -86,7 +66,6 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onError(VKError error) {
-                // User didn't pass Authorization
             }
         };
 

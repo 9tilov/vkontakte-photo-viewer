@@ -112,8 +112,8 @@ public class PreviewFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("images", photos);
-                bundle.putInt("position", position);
+                bundle.putParcelable(Consts.EXTRA_PHOTO_ARRAY, photos);
+                bundle.putInt(Consts.EXTRA_PHOTO_POSITION, position);
 
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();

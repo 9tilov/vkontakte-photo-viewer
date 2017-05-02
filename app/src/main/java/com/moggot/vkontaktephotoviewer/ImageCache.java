@@ -32,8 +32,8 @@ public class ImageCache {
         // int in its constructor.
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
-        // Use 1/8th of the available memory for this memory cache.
-        final int cacheSize = maxMemory;
+        // Use 1/4th of the available memory for this memory cache.
+        final int cacheSize = maxMemory / 4;
 
         mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override

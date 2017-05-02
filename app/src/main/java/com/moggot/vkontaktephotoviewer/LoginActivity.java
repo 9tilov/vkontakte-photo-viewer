@@ -105,5 +105,4 @@ public class LoginActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 }
