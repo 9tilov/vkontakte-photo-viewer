@@ -12,22 +12,25 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
+/**
+ * Класс адаптера для RecyclerView, для отображения фото на экране превью
+ */
+public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.ViewHolder> {
 
     private List<Bitmap> galleryList;
 
-    public PhotoAdapter(List<Bitmap> galleryList) {
+    public PreviewAdapter(List<Bitmap> galleryList) {
         this.galleryList = galleryList;
     }
 
     @Override
-    public PhotoAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public PreviewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cell_layout, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PhotoAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(PreviewAdapter.ViewHolder viewHolder, int i) {
 
         viewHolder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         viewHolder.img.setImageBitmap(galleryList.get(i));
@@ -55,9 +58,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
-        private PhotoAdapter.ClickListener clickListener;
+        private PreviewAdapter.ClickListener clickListener;
 
-        public RecyclerTouchListener(Context context, final PhotoAdapter.ClickListener clickListener) {
+        public RecyclerTouchListener(Context context, final PreviewAdapter.ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override

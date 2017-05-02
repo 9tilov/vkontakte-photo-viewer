@@ -17,7 +17,9 @@ import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
-
+/**
+ * Класс фрагмента с логином
+ */
 public class LoginFragment extends Fragment {
 
     private static final String[] sMyScope = new String[]{
@@ -57,7 +59,6 @@ public class LoginFragment extends Fragment {
         VKCallback<VKAccessToken> callback = new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                // User passed Authorization
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.container, PreviewFragment.newInstance())

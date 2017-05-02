@@ -8,6 +8,9 @@ import com.github.ybq.android.spinkit.style.CubeGrid;
 import com.moggot.vkontaktephotoviewer.R;
 import com.vk.sdk.api.model.VKApiPhoto;
 
+/**
+ * Класс для отображения данных экрана с фото во время его загрузки
+ */
 public class DownloadPhotoDisplay implements Observer {
 
     private static final String LOG_TAG = DownloadPhotoDisplay.class.getSimpleName();

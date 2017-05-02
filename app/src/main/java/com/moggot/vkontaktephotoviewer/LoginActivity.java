@@ -11,6 +11,12 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
+/**
+ * Класс активити с логином.
+ * Активити представлено двумя фрагментами:
+ * - фрагмент с логином
+ * - фрагмент с превью фото
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private boolean isResumed = false;
@@ -91,13 +97,11 @@ public class LoginActivity extends AppCompatActivity {
         VKCallback<VKAccessToken> callback = new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                // User passed Authorization
                 showLogin();
             }
 
             @Override
             public void onError(VKError error) {
-                // User didn't pass Authorization
             }
         };
 

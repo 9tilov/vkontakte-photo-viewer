@@ -5,6 +5,9 @@ import com.vk.sdk.api.model.VKApiPhoto;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Класс с данными фото, реализующий интерфейс {@link Observable}
+ */
 public class PhotoData implements Observable {
 
     private List<Observer> observers;

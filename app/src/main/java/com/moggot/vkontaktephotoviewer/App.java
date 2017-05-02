@@ -25,6 +25,9 @@ public class App extends Application {
         }
     };
 
+    /**
+     * Инициализация VK API
+     */
     @Override
     public void onCreate() {
         super.onCreate();

@@ -3,6 +3,10 @@ package com.moggot.vkontaktephotoviewer;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
+/**
+ * Класс memory cache.
+ * Используется паттерн одиночка, т.к. кэш един для всего приложения
+ */
 public class ImageCache {
 
     private LruCache<String, Bitmap> mMemoryCache;
@@ -27,19 +31,16 @@ public class ImageCache {
     }
 
     private void init() {
-        // Get max available VM memory, exceeding this amount will throw an
-        // OutOfMemory exception. Stored in kilobytes as LruCache takes an
-        // int in its constructor.
+        //определяем максимальную память, выделенную приложению
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
-        // Use 1/4th of the available memory for this memory cache.
+        // берем 1/4 часть от доступной памяти
         final int cacheSize = maxMemory / 4;
 
         mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
-                // The cache size will be measured in kilobytes rather than
-                // number of items.
+                //размер кэша измеряется в кб, поэтому делим на 1024
                 return bitmap.getByteCount() / 1024;
             }
         };

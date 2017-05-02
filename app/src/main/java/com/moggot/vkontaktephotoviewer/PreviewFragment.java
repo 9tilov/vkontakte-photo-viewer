@@ -1,7 +1,6 @@
 package com.moggot.vkontaktephotoviewer;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -39,7 +38,7 @@ public class PreviewFragment extends Fragment {
 
     private static final String LOG_TAG = PreviewFragment.class.getSimpleName();
 
-    private PhotoAdapter adapter;
+    private PreviewAdapter adapter;
     private List<Bitmap> photosBitmap;
     private VKPhotoArray photos;
     private DownloadImageSetTask task;
@@ -61,7 +60,7 @@ public class PreviewFragment extends Fragment {
         }
 
         photosBitmap = new ArrayList<>();
-        adapter = new PhotoAdapter(photosBitmap);
+        adapter = new PreviewAdapter(photosBitmap);
 
         VKAccessToken token = VKAccessToken.currentToken();
         VKRequest request = new VKRequest("photos.getAll", VKParameters.from(token.userId, "request", "extended", "1", "count", "200"), VKPhotoArray.class);
@@ -108,7 +107,7 @@ public class PreviewFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
 
-        recyclerView.addOnItemTouchListener(new PhotoAdapter.RecyclerTouchListener(getApplicationContext(), new PhotoAdapter.ClickListener() {
+        recyclerView.addOnItemTouchListener(new PreviewAdapter.RecyclerTouchListener(getApplicationContext(), new PreviewAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Bundle bundle = new Bundle();

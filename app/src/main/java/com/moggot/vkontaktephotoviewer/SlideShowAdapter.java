@@ -20,15 +20,18 @@ import com.vk.sdk.api.model.VKPhotoArray;
 
 import java.io.InputStream;
 
-public class PageViewAdapter extends PagerAdapter {
+/**
+ * Класс адаптера для отображения одиночной фотографии
+ */
+public class SlideShowAdapter extends PagerAdapter {
 
-    private static final String LOG_TAG = PageViewAdapter.class.getSimpleName();
+    private static final String LOG_TAG = SlideShowAdapter.class.getSimpleName();
 
     private ImageCache cache;
     private VKPhotoArray images;
     private Resources res;
 
-    public PageViewAdapter(Resources res, VKPhotoArray images) {
+    public SlideShowAdapter(Resources res, VKPhotoArray images) {
         this.images = images;
         this.cache = ImageCache.getInstance();
         this.res = res;
@@ -87,10 +90,12 @@ public class PageViewAdapter extends PagerAdapter {
 
             Bitmap image = null;
             try {
+                //пытаемся загрузить фото из кэша, если не получается, то грузим с сервера
                 image = cache.getBitmapFromMemCache(url);
                 if (image == null) {
                     InputStream in = new java.net.URL(url).openStream();
                     image = BitmapFactory.decodeStream(in);
+                    //сохраняем фото в кэш
                     cache.addBitmapToMemoryCache(url, image);
                 }
             } catch (Exception e) {

@@ -12,9 +12,11 @@ import com.moggot.vkontaktephotoviewer.R;
 import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Класс для отображения данных экрана с фото
+ */
 public class PhotoDisplay implements Observer {
 
     private static final String LOG_TAG = PhotoDisplay.class.getSimpleName();

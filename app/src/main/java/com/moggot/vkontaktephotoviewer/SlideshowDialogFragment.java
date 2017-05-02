@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ public class SlideshowDialogFragment extends DialogFragment {
         VKPhotoArray photos = getArguments().getParcelable(Consts.EXTRA_PHOTO_ARRAY);
         int selectedPosition = getArguments().getInt(Consts.EXTRA_PHOTO_POSITION);
 
-        PageViewAdapter myViewPagerAdapter = new PageViewAdapter(getContext().getResources(), photos);
+        SlideShowAdapter myViewPagerAdapter = new SlideShowAdapter(getContext().getResources(), photos);
         viewPager.setAdapter(myViewPagerAdapter);
 
         setCurrentItem(selectedPosition);
