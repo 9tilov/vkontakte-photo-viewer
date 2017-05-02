@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VkontaktePhotoViewer</string>
+    <string name="app_name">VK Photo Viewer</string>
 
     <integer name="com_vk_sdk_AppId" translatable="false">6002597</integer>
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VkontaktePhotoViewer</string>
+    <string name="app_name">VK Photo Viewer</string>
 
     <string name="login">Войти</string>
     <string name="logout">Выйти</string>
